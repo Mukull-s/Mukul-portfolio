@@ -1,0 +1,316 @@
+/* ================================================================
+   HERO — Component Styles
+   Phase 1: Static composition (Act I state)
+   Phase 2 will add scroll-driven animation via GSAP
+   ================================================================ */
+
+/* ---- Scroll Runway Container ---- */
+.heroContainer {
+  position: relative;
+  width: 100%;
+  height: 700vh; /* ScrollTrigger scroll runway */
+}
+
+/* ---- Pinned Viewport ---- */
+.heroPinned {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--hero-bg, hsl(0, 15%, 4%));
+  /* CSS custom property for GSAP animation in Phase 2 */
+}
+
+/* ================================================================
+   LAYER 0 — Background + Vignette
+   ================================================================ */
+.atmosphericLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ================================================================
+   LAYER 2 — Three.js Canvas (placeholder for Phase 3)
+   ================================================================ */
+.canvasLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ================================================================
+   LAYER 3 — Katakana Typography
+   ================================================================ */
+.katakanaLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 4; /* Behind portrait foreground, in front of background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* Initial state: hidden (Act I) */
+  opacity: 0;
+}
+
+.katakanaWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35vw; /* Gap centered on the portrait */
+  padding: 0 5vw;
+}
+
+.katakanaChar {
+  font-family: var(--font-yuji), "Yuji Syuku", serif;
+  font-size: clamp(20vh, 50vh, 55vh);
+  line-height: 1;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  user-select: none;
+  will-change: opacity, color, filter, transform;
+}
+
+/* Mobile: kakejiku vertical arrangement */
+@media (max-width: 767px) {
+  .katakanaWrapper {
+    flex-direction: column;
+    gap: 15vh;
+  }
+
+  .katakanaChar {
+    font-size: clamp(15vh, 25vh, 30vh);
+  }
+}
+
+/* ================================================================
+   LAYER 4 — Portrait Background & Foreground (Sandwich)
+   ================================================================ */
+.portraitBgLayer,
+.portraitFgLayer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+}
+
+.portraitBgLayer {
+  z-index: 3; /* Behind typography */
+}
+
+.portraitFgLayer {
+  z-index: 5; /* In front of typography, rendering silhouette only */
+}
+
+.portraitWrapper {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.portraitImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the entire screen, full-bleed */
+  /* Start invisible — fades in via JS animation on mount */
+  opacity: 0;
+}
+
+/* Mobile: portrait dominates (70vh) */
+@media (max-width: 767px) {
+  .portraitWrapper {
+    width: 100vw;
+    height: 100vh;
+  }
+}
+
+/* ================================================================
+   LAYER 5 — English Name
+   ================================================================ */
+.englishNameLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 4; /* Behind portrait foreground, in front of background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* Initial state: hidden (Act I) */
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.englishName {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(4rem, 12vw, 12rem);
+  line-height: 1;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  text-align: center;
+  user-select: none;
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* ================================================================
+   LAYER 6 — Subtitle
+   ================================================================ */
+.subtitleLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* Initial state: hidden (Act I) */
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.subtitle {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+  letter-spacing: 0.22em;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  text-align: center;
+  /* Positioned over the chest area — matching reference layout */
+  margin-top: 15vh;
+  user-select: none;
+}
+
+/* ================================================================
+   LAYER 7 — Horizon Line
+   ================================================================ */
+.horizonLineLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.horizonLine {
+  /* Initial state: invisible, zero width */
+  width: 0%;
+  height: 1px;
+  background-color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0;
+  will-change: width, opacity;
+}
+
+/* ================================================================
+   LAYER 8 — Act VII Content (Biography + Navigation)
+   ================================================================ */
+.actVIILayer {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  /* Initial state: hidden */
+  opacity: 0;
+  transform: translateY(40px);
+  will-change: opacity, transform;
+}
+
+/* Act VII layout: portrait left, content right */
+.actVIIContent {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.actVIIBio {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  margin-top: 12vh;
+}
+
+/* Chapter navigation — vertical list */
+.actVIINav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.navChapter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-variant: small-caps;
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  letter-spacing: 0.2em;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  pointer-events: auto;
+}
+
+.navChapter::before {
+  content: "";
+  position: absolute;
+  left: -5vw;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--color-torii, hsl(355, 45%, 28%));
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navChapter:hover {
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  transform: translateX(12px);
+}
+
+.navChapter:hover::before {
+  width: 5vw;
+}
+
+.navKanji {
+  font-family: var(--font-yuji), "Yuji Syuku", serif;
+  font-variant: normal;
+  font-size: 0.9em;
+  opacity: 0.6;
+  letter-spacing: 0;
+}
+
+/* Mobile: single column */
+@media (max-width: 767px) {
+  .actVIIContent {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 8vw;
+  }
+}
