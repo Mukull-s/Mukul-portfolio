@@ -1,33 +1,44 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Noto_Serif, Space_Mono } from "next/font/google";
+import { Cormorant_Garamond, Yuji_Syuku } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 
-const playfair = Playfair_Display({
+// ---- Primary Typeface: Cormorant Garamond ----
+// Used for: Name reveal, subtitles, navigation, body, metadata
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-display",
+  weight: ["300", "400", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
   display: "swap",
 });
 
-const notoSerif = Noto_Serif({
+// ---- Japanese Typeface: Yuji Syuku ----
+// Used for: ムクル (Katakana), section markers, 終 closing mark
+const yujiSyuku = Yuji_Syuku({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-mono",
+  weight: "400",
+  variable: "--font-yuji",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Mukul Singhal — Developer, Creator, Craftsman",
+  title: "MUKUL — Developer. Designer. Storyteller.",
   description:
-    "Building at the intersection of AI and full-stack development — AI agents, autonomous systems, and modern web experiences.",
+    "A cinematic portfolio experience. Building at the intersection of AI, full-stack engineering, and design.",
+  openGraph: {
+    title: "MUKUL — Developer. Designer. Storyteller.",
+    description:
+      "A cinematic portfolio experience. Building at the intersection of AI, full-stack engineering, and design.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MUKUL — Developer. Designer. Storyteller.",
+    description:
+      "A cinematic portfolio experience. Building at the intersection of AI, full-stack engineering, and design.",
+  },
 };
 
 export default function RootLayout({
@@ -38,15 +49,32 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${notoSerif.variable} ${spaceMono.variable}`}
+      className={`${cormorant.variable} ${yujiSyuku.variable}`}
     >
       <body>
-        <div className="grain-overlay" />
-        <LenisProvider>
-          {children}
-        </LenisProvider>
+        {/* Skip link — accessibility */}
+        <a href="#selected-works" className="sr-only">
+          Skip to portfolio
+        </a>
+
+        {/* Film grain overlay — persistent across all pages */}
+        <div className="grain-overlay" aria-hidden="true">
+          <svg>
+            <filter id="grain-filter">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.65"
+                numOctaves={3}
+                stitchTiles="stitch"
+                seed={0}
+              />
+              <feColorMatrix type="saturate" values="0" />
+            </filter>
+          </svg>
+        </div>
+
+        <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
   );
 }
-
