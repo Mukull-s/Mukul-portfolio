@@ -16,28 +16,28 @@ const cormorant = Cormorant_Garamond({
 // ---- Japanese Typeface: Yuji Syuku ----
 // Used for: ムクル (Katakana), section markers, 終 closing mark
 const yujiSyuku = Yuji_Syuku({
-  subsets: ["latin"],
   weight: "400",
   variable: "--font-yuji",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
-  title: "MUKUL — Developer. Designer. Storyteller.",
+  title: "MUKUL — Developer. AI Architect. Storyteller.",
   description:
-    "A cinematic portfolio experience. Building at the intersection of AI, full-stack engineering, and design.",
+    "A cinematic portfolio experience. Building at the intersection of AI, full-stack systems, and digital craftsmanship.",
   openGraph: {
-    title: "MUKUL — Developer. Designer. Storyteller.",
+    title: "MUKUL — Developer. AI Architect. Storyteller.",
     description:
-      "A cinematic portfolio experience. Building at the intersection of AI, full-stack engineering, and design.",
+      "A cinematic portfolio experience. Building at the intersection of AI, full-stack systems, and digital craftsmanship.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MUKUL — Developer. Designer. Storyteller.",
+    title: "MUKUL — Developer. AI Architect. Storyteller.",
     description:
-      "A cinematic portfolio experience. Building at the intersection of AI, full-stack engineering, and design.",
+      "A cinematic portfolio experience. Building at the intersection of AI, full-stack systems, and digital craftsmanship.",
   },
 };
 
