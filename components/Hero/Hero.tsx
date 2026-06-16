@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styles from "./Hero.module.css";
 import { SECTION_IDS } from "@/lib/constants";
 import useScrollTimeline from "@/hooks/useScrollTimeline";
@@ -11,6 +11,8 @@ import { PortraitBackgroundLayer, PortraitForegroundLayer } from "./PortraitLaye
 import EnglishNameLayer from "./EnglishNameLayer";
 import HorizonLine from "./HorizonLine";
 import ActVIIContent from "./ActVIIContent";
+import ParticleCanvas from "./ParticleCanvas";
+import Loader from "./Loader";
 
 /**
  * HERO — Main Container
@@ -19,24 +21,17 @@ import ActVIIContent from "./ActVIIContent";
  * - Outer section (#hero-container): 700vh tall scroll runway
  * - Inner div (#hero-pinned): 100vh sticky viewport
  * - All visual layers stacked absolutely inside the pinned viewport
- *
- * Stacking context (back to front):
- *   0  — Background + Vignette (AtmosphericEffects)
- *   2  — Three.js Canvas (Phase 3)
- *   3  — Portrait Background Layer (red background + silhouette behind text)
- *   4  — Katakana Typography (KatakanaLayer)
- *   5  — English Name (EnglishNameLayer)
- *   6  — Portrait Foreground Layer (silhouette cutout on top of text)
- *   7  — Subtitle
- *   8  — Horizon Line
- *   9  — Act VII Content
  */
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null);
   const pinnedRef = useRef<HTMLDivElement>(null);
   const atmosphericRef = useRef<HTMLDivElement>(null);
+  const bgTextureRef = useRef<HTMLDivElement>(null);
   const katakanaRef = useRef<HTMLDivElement>(null);
   
+  // Loader status state
+  const [isLoaded, setIsLoaded] = useState(false);
+
   // Split portrait layers
   const portraitBgRef = useRef<HTMLDivElement>(null);
   const portraitBgImgRef = useRef<HTMLImageElement>(null);
@@ -48,6 +43,9 @@ export default function Hero() {
   const subtitleRef = useRef<HTMLDivElement>(null);
   const horizonLineRef = useRef<HTMLDivElement>(null);
   const actVIIContentRef = useRef<HTMLDivElement>(null);
+
+  // Scroll progress ref to feed the particle canvas
+  const scrollProgressRef = useRef(0);
 
   // Bind the master scroll timeline hook
   useScrollTimeline({
@@ -63,51 +61,60 @@ export default function Hero() {
     subtitleRef,
     horizonLineRef,
     actVIIContentRef,
+    bgTextureRef,
+    scrollProgressRef,
+    isLoaded,
   });
 
   return (
-    <section
-      ref={containerRef}
-      id={SECTION_IDS.hero}
-      className={styles.heroContainer}
-    >
-      <div
-        ref={pinnedRef}
-        id={SECTION_IDS.heroPinned}
-        className={styles.heroPinned}
+    <>
+      {/* Cinematic Loader Screen */}
+      <Loader onComplete={() => setIsLoaded(true)} />
+
+      <section
+        ref={containerRef}
+        id={SECTION_IDS.hero}
+        className={styles.heroContainer}
       >
-        {/* LAYER 0: Background + Vignette */}
-        <AtmosphericEffects layerRef={atmosphericRef} />
+        <div
+          ref={pinnedRef}
+          id={SECTION_IDS.heroPinned}
+          className={styles.heroPinned}
+        >
+          {/* LAYER 0: Background + Vignette */}
+          <AtmosphericEffects layerRef={atmosphericRef} textureRef={bgTextureRef} />
 
-        {/* LAYER 2: Three.js Canvas — Phase 3 placeholder */}
-        <div className={styles.canvasLayer} aria-hidden="true" />
+          {/* LAYER 2: Particle Canvas */}
+          <ParticleCanvas scrollProgressRef={scrollProgressRef} isLoaded={isLoaded} />
 
-        {/* LAYER 3: Portrait Background (red background + silhouette behind text) */}
-        <PortraitBackgroundLayer
-          portraitRef={portraitBgRef}
-          portraitImgRef={portraitBgImgRef}
-        />
+          {/* LAYER 3: Portrait Background (red background + silhouette behind text) */}
+          <PortraitBackgroundLayer
+            portraitRef={portraitBgRef}
+            portraitImgRef={portraitBgImgRef}
+            isLoaded={isLoaded}
+          />
 
-        {/* LAYER 4: Katakana Typography (hidden in Act I) */}
-        <KatakanaLayer layerRef={katakanaRef} />
+          {/* LAYER 4: Katakana Typography (hidden, rendered in Canvas) */}
+          <KatakanaLayer layerRef={katakanaRef} />
 
-        {/* LAYER 5: English Name (hidden in Act I) */}
-        <EnglishNameLayer nameRef={englishNameRef} subtitleRef={subtitleRef} />
+          {/* LAYER 5: English Name (hidden in Act I) */}
+          <EnglishNameLayer nameRef={englishNameRef} subtitleRef={subtitleRef} />
 
-        {/* LAYER 6: Portrait Foreground (silhouette only, in front of text) */}
-        <PortraitForegroundLayer
-          portraitRef={portraitFgRef}
-          portraitImgRef={portraitFgImgRef}
-          portraitCornerImgRef={portraitCornerImgRef}
-        />
+          {/* LAYER 6: Portrait Foreground (silhouette only, in front of text) */}
+          <PortraitForegroundLayer
+            portraitRef={portraitFgRef}
+            portraitImgRef={portraitFgImgRef}
+            portraitCornerImgRef={portraitCornerImgRef}
+            isLoaded={isLoaded}
+          />
 
+          {/* LAYER 8: Horizon Line (hidden in Act I) */}
+          <HorizonLine lineRef={horizonLineRef} />
 
-        {/* LAYER 8: Horizon Line (hidden in Act I) */}
-        <HorizonLine lineRef={horizonLineRef} />
-
-        {/* LAYER 9: Act VII Content (hidden in Act I) */}
-        <ActVIIContent contentRef={actVIIContentRef} />
-      </div>
-    </section>
+          {/* LAYER 9: Act VII Content (hidden in Act I) */}
+          <ActVIIContent contentRef={actVIIContentRef} />
+        </div>
+      </section>
+    </>
   );
 }

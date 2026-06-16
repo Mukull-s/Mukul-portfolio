@@ -21,6 +21,9 @@ interface ScrollTimelineParams {
   subtitleRef: React.RefObject<HTMLDivElement | null>;
   horizonLineRef: React.RefObject<HTMLDivElement | null>;
   actVIIContentRef: React.RefObject<HTMLDivElement | null>;
+  bgTextureRef: React.RefObject<HTMLDivElement | null>;
+  scrollProgressRef: React.MutableRefObject<number>;
+  isLoaded: boolean;
 }
 
 export default function useScrollTimeline({
@@ -36,10 +39,16 @@ export default function useScrollTimeline({
   subtitleRef,
   horizonLineRef,
   actVIIContentRef,
+  bgTextureRef,
+  scrollProgressRef,
+  isLoaded,
  }: ScrollTimelineParams) {
   const masterTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
+    // Guard until resources are loaded to prevent layout shift during calculation
+    if (!isLoaded) return;
+
     const container = containerRef.current;
     const pinned = pinnedRef.current;
     const portraitBg = portraitBgRef.current;
@@ -52,6 +61,7 @@ export default function useScrollTimeline({
     const subtitle = subtitleRef.current;
     const horizonLine = horizonLineRef.current;
     const actVIIContent = actVIIContentRef.current;
+    const bgTexture = bgTextureRef.current;
 
     // Guard against unmounted elements
     if (
@@ -66,7 +76,8 @@ export default function useScrollTimeline({
       !englishName ||
       !subtitle ||
       !horizonLine ||
-      !actVIIContent
+      !actVIIContent ||
+      !bgTexture
     ) {
       return;
     }
@@ -80,6 +91,7 @@ export default function useScrollTimeline({
       actVIIContent.querySelectorAll("button")
     );
     const bioText = actVIIContent.querySelector("p");
+    const bioCard = actVIIContent.querySelector("[class*='actVIIBio']");
 
     // English name sub-spans for split gap animation
     const nameHeading = englishName.querySelector("h1");
@@ -98,6 +110,8 @@ export default function useScrollTimeline({
     if (nameCenterChar) gsap.set(nameCenterChar, { opacity: 0, width: 0 });
     
     gsap.set(subtitle, { opacity: 0, scale: 1, x: 0, y: 0 });
+    if (bioCard) gsap.set(bioCard, { x: 0 });
+    gsap.set(bgTexture, { opacity: 0 });
     gsap.set(horizonLine, { width: "0%", opacity: 0 });
     gsap.set(actVIIContent, { opacity: 0, y: 40 });
     gsap.set(pinned, {
@@ -109,6 +123,17 @@ export default function useScrollTimeline({
       defaults: { ease: "none" }, // ScrollTrigger drives interpolation linearly
     });
     masterTimelineRef.current = tl;
+
+    // Linear tween to track scroll progress (0.0 to 1.0) on the ref
+    const progressObj = { value: 0 };
+    tl.to(progressObj, {
+      value: 1,
+      ease: "none",
+      onUpdate: () => {
+        scrollProgressRef.current = progressObj.value;
+      },
+      duration: 1.0,
+    }, 0);
 
     // ScrollTrigger pinning and timeline linkage
     const st = ScrollTrigger.create({
@@ -122,6 +147,11 @@ export default function useScrollTimeline({
       anticipatePin: 1,
       invalidateOnRefresh: true,
     });
+
+    // Force ScrollTrigger to refresh bounds after layout settles
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
 
     // =========================================================================
     // 1. Act I: The Presence (0.00 -> 0.25 scroll)
@@ -176,15 +206,17 @@ export default function useScrollTimeline({
       duration: 0.25,
     }, 0.55);
 
-    // Coalescing: English Name materializes as a soft blurred shape directly in the flow
+    // Coalescing: English Name materializes as a soft blurred shape above portrait
     tl.fromTo(englishName, {
       opacity: 0,
       filter: "blur(24px)",
       scale: 0.95,
+      y: "-20vh",
     }, {
       opacity: 0.3,
       filter: "blur(6px)",
       scale: 1.0,
+      y: "-30vh",
       duration: 0.20,
     }, 0.60);
 
@@ -202,9 +234,10 @@ export default function useScrollTimeline({
     // =========================================================================
     // 4. Act IV: The Snap Reveal (0.80 -> 0.90 scroll)
     // =========================================================================
-    // The primary payoff: English Name snaps decisively to crisp focus
+    // The primary payoff: English Name snaps decisively to crisp focus above portrait
     tl.to(englishName, {
       opacity: 1,
+      y: "-30vh",  /* Above portrait — never overlapping the face */
       filter: "blur(0px)",
       ease: EASING.snap,
       duration: 0.04, // Very short span
@@ -231,13 +264,13 @@ export default function useScrollTimeline({
       duration: 0.04,
     }, 0.82);
 
-    // Subtitle fades in after name is revealed (spawns after some time)
+    // Subtitle fades in directly below MUKUL title
     tl.fromTo(subtitle, {
       opacity: 0,
-      y: 15,
+      y: "-21vh",  /* Directly below MUKUL at -30vh, forming unified header block */
     }, {
       opacity: 1,
-      y: 0,
+      y: "-21vh",
       ease: "power2.out",
       duration: 0.08,
     }, 0.83);
@@ -245,52 +278,33 @@ export default function useScrollTimeline({
     // =========================================================================
     // 5. Act V: The World Opens (0.93 -> 1.00 scroll)
     // =========================================================================
-    // Portrait shrinks and slides to left side for navigation layout
+    // Fade out the center-aligned intro layers (portrait, name, tagline)
     tl.to([portraitBg, portraitFg], {
-      scale: HERO.portrait.cornerScale, // 0.35
-      x: "-30vw",
-      y: "-15vh",
-      ease: EASING.smooth,
-      duration: 0.07,
-    }, 0.93);
-
-    // Fade out the portrait background image and center silhouette, fade in the corner cutout
-    tl.to(portraitBg, {
       opacity: 0,
       ease: EASING.smooth,
       duration: 0.07,
     }, 0.93);
 
-    tl.to(portraitFgImg, {
-      opacity: 0,
-      ease: EASING.smooth,
-      duration: 0.07,
-    }, 0.93);
-
-    tl.to(portraitCornerImg, {
+    tl.to(bgTexture, {
       opacity: 1,
       ease: EASING.smooth,
       duration: 0.07,
     }, 0.93);
 
     tl.to(englishName, {
-      scale: 0.35,
-      x: "-26vw",
-      y: "-40vh",
+      opacity: 0,
       ease: EASING.smooth,
       duration: 0.07,
     }, 0.93);
 
-    // Subtitle shrinks and moves underneath the name header
+    // Subtitle fades out
     tl.to(subtitle, {
-      scale: 0.85,
-      x: "-26vw",
-      y: "-36.5vh",
+      opacity: 0,
       ease: EASING.smooth,
       duration: 0.07,
     }, 0.93);
 
-    // Biography panel and vertical nav chapters fade in
+    // Biography panel, title card, portrait, and vertical nav chapters fade in
     tl.to(actVIIContent, {
       opacity: 1,
       y: 0,
@@ -340,6 +354,8 @@ export default function useScrollTimeline({
     subtitleRef,
     horizonLineRef,
     actVIIContentRef,
+    bgTextureRef,
+    isLoaded,
   ]);
 
   return masterTimelineRef;

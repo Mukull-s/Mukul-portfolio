@@ -8,7 +8,8 @@
 .heroContainer {
   position: relative;
   width: 100%;
-  height: 700vh; /* ScrollTrigger scroll runway */
+  height: 700vh;
+  /* ScrollTrigger scroll runway */
 }
 
 /* ---- Pinned Viewport ---- */
@@ -33,13 +34,35 @@
   pointer-events: none;
 }
 
+.bgTexture {
+  position: absolute;
+  inset: 0;
+  background-image: url("/Bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: opacity;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Cinematic lighting and dark vignetted transition overlays over the red texture */
+.bgTexture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(14, 4, 4, 0.1) 0%, rgba(14, 4, 4, 0.7) 100%),
+    linear-gradient(to bottom, rgba(14, 4, 4, 0.8) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%, rgba(14, 4, 4, 0.85) 100%);
+  pointer-events: none;
+}
+
 /* ================================================================
    LAYER 2 — Three.js Canvas (placeholder for Phase 3)
    ================================================================ */
 .canvasLayer {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 6; /* Must be ABOVE portrait foreground (z-index 5) to be visible */
   pointer-events: none;
 }
 
@@ -48,14 +71,16 @@
    ================================================================ */
 .katakanaLayer {
   position: absolute;
-  inset: 0;
-  z-index: 4; /* Behind portrait foreground, in front of background */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  opacity: 0.0001;
   pointer-events: none;
-  /* Initial state: hidden (Act I) */
-  opacity: 0;
+  z-index: 4;
 }
 
 .katakanaWrapper {
@@ -64,7 +89,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 35vw; /* Gap centered on the portrait */
+  gap: 35vw;
+  /* Gap centered on the portrait */
   padding: 0 5vw;
 }
 
@@ -104,11 +130,13 @@
 }
 
 .portraitBgLayer {
-  z-index: 3; /* Behind typography */
+  z-index: 3;
+  /* Behind typography */
 }
 
 .portraitFgLayer {
-  z-index: 5; /* In front of typography, rendering silhouette only */
+  z-index: 5;
+  /* In front of typography, rendering silhouette only */
 }
 
 .portraitWrapper {
@@ -122,9 +150,16 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Cover the entire screen, full-bleed */
+  object-fit: cover;
+  /* Cover the entire screen, full-bleed */
   /* Start invisible — fades in via JS animation on mount */
   opacity: 0;
+}
+
+.portraitCornerImage {
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.5)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  transform: scale(1.45);
+  transform-origin: center center;
 }
 
 /* Mobile: portrait dominates (70vh) */
@@ -141,7 +176,8 @@
 .englishNameLayer {
   position: absolute;
   inset: 0;
-  z-index: 4; /* Behind portrait foreground, in front of background */
+  z-index: 4;
+  /* Behind portrait foreground, in front of background */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -190,7 +226,7 @@
   color: var(--color-ivory, hsl(35, 15%, 88%));
   text-align: center;
   /* Positioned over the chest area — matching reference layout */
-  margin-top: 15vh;
+  margin-top: 0px;
   user-select: none;
 }
 
@@ -222,10 +258,11 @@
 .actVIILayer {
   position: absolute;
   inset: 0;
-  z-index: 8;
+  z-index: 10;
   display: flex;
   align-items: center;
   pointer-events: none;
+  overflow: visible;
   /* Initial state: hidden */
   opacity: 0;
   transform: translateY(40px);
@@ -244,13 +281,79 @@
   align-items: center;
 }
 
+/* Left Column containing title card, portrait container, and bio card */
+.actVIILeftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  z-index: 10;
+  overflow: visible;
+}
+
+/* Title Card containing Name + Tagline (no glass background) */
+.actVIITitleCard {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.actVIITitle {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+  line-height: 1.1;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  margin: 0 0 0.5rem 0;
+}
+
+.actVIITagline {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+  letter-spacing: 0.18em;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Portrait container overlay sitting in-flow between title card and bio card */
+.actVIIPortraitContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  position: relative;
+}
+
+.actVIIPortrait {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.75)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45)) brightness(0.88) contrast(1.02) sepia(0.1);
+  opacity: 0.95;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 98%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 98%);
+}
+
 .actVIIBio {
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   font-weight: 400;
   font-size: clamp(0.95rem, 1.2vw, 1.15rem);
   line-height: 1.7;
   color: var(--color-washi, hsl(30, 8%, 72%));
-  margin-top: 12vh;
+  /* align-self: start; */
+  margin-top: -3em;
+  padding-top: 4rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 500px;
+  position: relative;
 }
 
 /* Chapter navigation — vertical list */
@@ -313,4 +416,108 @@
     gap: 2rem;
     padding: 0 8vw;
   }
+}
+
+/* Glassmorphism panel for cards in Act VII */
+.glassCard {
+  background: rgba(14, 5, 5, 0.55);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  border: 1px solid rgba(245, 235, 220, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    0 20px 45px rgba(0, 0, 0, 0.4);
+  padding: 2.5rem;
+  border-radius: 0px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+  pointer-events: auto;
+  /* Allow interactions for navigation buttons inside glass card */
+}
+
+.glassCard:hover {
+  background: rgba(14, 5, 5, 0.65);
+  border-color: rgba(220, 40, 40, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 25px 55px rgba(0, 0, 0, 0.55);
+}
+
+.glassCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 220, 180, 0.02) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .glassCard {
+    padding: 1.5rem;
+  }
+}
+
+/* ================================================================
+   LOADER SCREEN — Cinematic Loading Bar Overlay
+   ================================================================ */
+.loaderScreen {
+  position: fixed;
+  inset: 0;
+  background-color: var(--hero-bg, hsl(0, 15%, 4%));
+  z-index: 99999; /* Draw on top of all elements */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s;
+  pointer-events: all;
+}
+
+.loaderContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 320px;
+}
+
+.loaderText {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.5vw, 1.8rem);
+  letter-spacing: 0.15em;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  margin-bottom: 0.5rem;
+  text-align: center;
+  user-select: none;
+}
+
+.loaderBarWrapper {
+  width: 200px;
+  height: 2px;
+  background-color: rgba(245, 235, 220, 0.12);
+  position: relative;
+  overflow: hidden;
+  border-radius: 0px;
+}
+
+.loaderBar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--color-ivory, hsl(35, 15%, 88%));
+  transition: width 0.05s ease-out;
+}
+
+.loaderSubtext {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-variant: small-caps;
+  font-size: clamp(0.7rem, 1vw, 0.8rem);
+  letter-spacing: 0.3em;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.6;
+  margin-top: 0.8rem;
+  text-align: center;
+  user-select: none;
 }

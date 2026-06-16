@@ -107,7 +107,7 @@ export const HERO = {
 
   englishName: {
     text: "MUKUL",
-    subtitle: "Developer. Designer. Storyteller.",
+    subtitle: "Developer. AI Architect. Storyteller.",
   },
 } as const;
 

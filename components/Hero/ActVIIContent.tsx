@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef } from "react";
 import styles from "./Hero.module.css";
-import { NAV_CHAPTERS, SECTION_IDS } from "@/lib/constants";
+import { NAV_CHAPTERS, HERO } from "@/lib/constants";
 
 /**
  * LAYER 8 — Act VII Content
@@ -31,16 +30,38 @@ export default function ActVIIContent({ contentRef }: ActVIIContentProps) {
   return (
     <div ref={contentRef} className={styles.actVIILayer}>
       <div className={styles.actVIIContent}>
-        {/* Biography Panel */}
-        <div className={styles.actVIIBio}>
-          <p>
-            A builder at the intersection of AI, full-stack engineering, and
-            design. Creating systems that reason, interfaces that breathe, and
-            experiences that stay with you.
-          </p>
+        {/* Left Column: Title, Portrait, and Biography */}
+        <div className={styles.actVIILeftColumn}>
+          {/* Title Card */}
+          <div className={styles.actVIITitleCard}>
+            <h2 className={styles.actVIITitle}>{HERO.englishName.text}</h2>
+            <p className={styles.actVIITagline}>{HERO.englishName.subtitle}</p>
+          </div>
+
+          {/* Portrait Cutout Overlay */}
+          <div className={styles.actVIIPortraitContainer}>
+            <picture>
+              <img
+                src="/Portrait-removebg-preview.png"
+                alt="Mukul Portrait"
+                className={styles.actVIIPortrait}
+                width={666}
+                height={374}
+              />
+            </picture>
+          </div>
+
+          {/* Biography Card */}
+          <div className={`${styles.actVIIBio} ${styles.glassCard}`}>
+            <p>
+              A builder at the intersection of AI, full-stack systems, and
+              digital craftsmanship. Creating systems that reason, architectures that scale, and
+              stories that stay with you.
+            </p>
+          </div>
         </div>
 
-        {/* Chapter Navigation */}
+        {/* Right Column: Chapter Navigation */}
         <nav aria-label="Portfolio sections">
           <ul className={styles.actVIINav}>
             {NAV_CHAPTERS.map((chapter) => (
@@ -61,3 +82,4 @@ export default function ActVIIContent({ contentRef }: ActVIIContentProps) {
     </div>
   );
 }
+
