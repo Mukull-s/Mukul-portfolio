@@ -272,12 +272,12 @@
 /* Act VII layout: portrait left, content right */
 .actVIIContent {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1350px;
   margin: 0 auto;
   padding: 0 5vw;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 5.8fr 4.2fr;
+  gap: 5.5rem;
   align-items: center;
 }
 
@@ -288,32 +288,34 @@
   gap: 1.2rem;
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 650px;
   margin: 0 auto;
   z-index: 10;
   overflow: visible;
+  align-items: center;
 }
 
 /* Title Card containing Name + Tagline (no glass background) */
 .actVIITitleCard {
   text-align: center;
-  padding: 0.5rem 0;
+  padding: 0.2rem 0;
+  width: 100%;
 }
 
 .actVIITitle {
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   font-weight: 700;
   font-style: italic;
-  font-size: clamp(2.5rem, 4.5vw, 3.8rem);
-  line-height: 1.1;
+  font-size: clamp(3.2rem, 5.5vw, 4.8rem); /* Increased scale for stronger presence */
+  line-height: 1;
   color: var(--color-ivory, hsl(35, 15%, 88%));
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.50rem 0;
 }
 
 .actVIITagline {
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   font-weight: 600;
-  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
   letter-spacing: 0.18em;
   color: var(--color-washi, hsl(30, 8%, 72%));
   margin: 0;
@@ -323,6 +325,7 @@
 /* Portrait container overlay sitting in-flow between title card and bio card */
 .actVIIPortraitContainer {
   width: 100%;
+  max-width: 650px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -337,84 +340,98 @@
   object-fit: contain;
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.75)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45)) brightness(0.88) contrast(1.02) sepia(0.1);
   opacity: 0.95;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 98%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 98%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%);
 }
 
 .actVIIBio {
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   font-weight: 400;
-  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
   line-height: 1.7;
   color: var(--color-washi, hsl(30, 8%, 72%));
-  /* align-self: start; */
-  margin-top: -3em;
-  padding-top: 4rem;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 500px;
+  margin: 0;
+  padding: 1.8rem 2.2rem;
+  max-width: 650px;
+  width: 100%;
   position: relative;
+  text-align: center;
 }
 
-/* Chapter navigation — vertical list */
+/* Chapter navigation — vertical list with architectural spine */
 .actVIINav {
   list-style: none;
-  padding: 0;
+  padding: 0 0 0 2.5rem;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 2rem;
+  border-left: 2px solid rgba(245, 235, 220, 0.08); /* Architectural vertical spine */
+  position: relative;
 }
 
 .navChapter {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  font-variant: small-caps;
-  font-size: clamp(0.85rem, 1.1vw, 1rem);
-  letter-spacing: 0.2em;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 1.6vw, 1.5rem); /* Stronger hierarchy */
+  letter-spacing: 0.15em;
   color: var(--color-washi, hsl(30, 8%, 72%));
   cursor: pointer;
   transition: color 0.3s ease, transform 0.3s ease;
   position: relative;
+  background: none;
+  border: none;
+  padding: 0.5rem 0;
+  text-align: left;
   pointer-events: auto;
-}
-
-.navChapter::before {
-  content: "";
-  position: absolute;
-  left: -5vw;
-  top: 50%;
-  width: 0;
-  height: 1px;
-  background: var(--color-torii, hsl(355, 45%, 28%));
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .navChapter:hover {
   color: var(--color-ivory, hsl(35, 15%, 88%));
-  transform: translateX(12px);
-}
-
-.navChapter:hover::before {
-  width: 5vw;
+  transform: translateX(10px);
 }
 
 .navKanji {
   font-family: var(--font-yuji), "Yuji Syuku", serif;
   font-variant: normal;
-  font-size: 0.9em;
+  font-size: 1.3em; /* Acts as anchor */
+  color: var(--color-torii, hsl(355, 45%, 28%));
   opacity: 0.6;
-  letter-spacing: 0;
+  min-width: 2.2rem;
+  text-align: center;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.navChapter:hover .navKanji {
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  opacity: 1;
 }
 
 /* Mobile: single column */
 @media (max-width: 767px) {
   .actVIIContent {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 0 8vw;
+    gap: 3rem;
+    padding: 2rem 6vw;
+    overflow-y: auto;
+    max-height: 90vh;
+  }
+  .actVIILeftColumn {
+    max-width: 100%;
+  }
+  .actVIIPortraitContainer {
+    max-width: 100%;
+  }
+  .actVIIBio {
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+  .actVIINav {
+    padding-left: 1.5rem;
+    gap: 1.5rem;
   }
 }
 
