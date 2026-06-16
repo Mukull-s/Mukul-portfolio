@@ -52,7 +52,7 @@ export default function ActVIIContent({ contentRef }: ActVIIContentProps) {
           </div>
 
           {/* Biography Card */}
-          <div className={`${styles.actVIIBio} ${styles.glassCard}`}>
+          <div className={styles.actVIIBio}>
             <p>
               A builder at the intersection of AI, full-stack systems, and
               digital craftsmanship. Creating systems that reason, architectures that scale, and
@@ -72,7 +72,7 @@ export default function ActVIIContent({ contentRef }: ActVIIContentProps) {
                   type="button"
                 >
                   <span className={styles.navKanji}>{chapter.kanji}</span>
-                  {chapter.label}
+                  <span className={styles.navLabel}>{chapter.label}</span>
                 </button>
               </li>
             ))}
