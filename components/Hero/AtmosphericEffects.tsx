@@ -5,6 +5,7 @@ import styles from "./Hero.module.css";
 
 interface AtmosphericEffectsProps {
   layerRef: React.RefObject<HTMLDivElement | null>;
+  textureRef: React.RefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -17,12 +18,21 @@ interface AtmosphericEffectsProps {
  * Phase 2 will connect GSAP to animate these properties via the
  * hero-pinned container's style attribute.
  */
-export default function AtmosphericEffects({ layerRef }: AtmosphericEffectsProps) {
+export default function AtmosphericEffects({
+  layerRef,
+  textureRef,
+}: AtmosphericEffectsProps) {
   return (
     <div
       ref={layerRef}
       className={styles.atmosphericLayer}
       aria-hidden="true"
-    />
+    >
+      <div
+        ref={textureRef}
+        className={styles.bgTexture}
+        style={{ opacity: 0 }}
+      />
+    </div>
   );
 }

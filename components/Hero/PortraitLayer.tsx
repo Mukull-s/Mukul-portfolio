@@ -9,15 +9,17 @@ interface PortraitLayerProps {
   portraitRef: React.RefObject<HTMLDivElement | null>;
   portraitImgRef: React.RefObject<HTMLImageElement | null>;
   portraitCornerImgRef?: React.RefObject<HTMLImageElement | null>;
+  isLoaded?: boolean;
 }
 
 
 export function PortraitBackgroundLayer({
   portraitRef,
   portraitImgRef,
+  isLoaded = false,
 }: PortraitLayerProps) {
   useEffect(() => {
-    if (!portraitImgRef.current) return;
+    if (!portraitImgRef.current || !isLoaded) return;
 
     gsap.fromTo(
       portraitImgRef.current,
@@ -29,7 +31,7 @@ export function PortraitBackgroundLayer({
         ease: "power2.out",
       }
     );
-  }, [portraitImgRef]);
+  }, [portraitImgRef, isLoaded]);
 
   return (
     <div ref={portraitRef} className={styles.portraitBgLayer} aria-hidden="true">
@@ -54,9 +56,10 @@ export function PortraitForegroundLayer({
   portraitRef,
   portraitImgRef,
   portraitCornerImgRef,
+  isLoaded = false,
 }: PortraitLayerProps) {
   useEffect(() => {
-    if (!portraitImgRef.current) return;
+    if (!portraitImgRef.current || !isLoaded) return;
 
     gsap.fromTo(
       portraitImgRef.current,
@@ -68,7 +71,7 @@ export function PortraitForegroundLayer({
         ease: "power2.out",
       }
     );
-  }, [portraitImgRef]);
+  }, [portraitImgRef, isLoaded]);
 
   return (
     <div ref={portraitRef} className={styles.portraitFgLayer} aria-hidden="true">
@@ -136,7 +139,7 @@ export function PortraitForegroundLayer({
             ref={portraitCornerImgRef}
             src="/Portrait-removebg-preview.png"
             alt="Portrait Foreground Corner Cutout"
-            className={styles.portraitImage}
+            className={`${styles.portraitImage} ${styles.portraitCornerImage}`}
             width={666}
             height={374}
             fetchPriority="high"
