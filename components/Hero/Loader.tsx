@@ -8,10 +8,53 @@ interface LoaderProps {
 }
 
 export default function Loader({ onComplete }: LoaderProps) {
+  if (typeof window !== "undefined") {
+    (window as any).__loaderActive = true;
+  }
+
   const [progress, setProgress] = useState(0);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
+
+  // Scroll locking and keyboard interaction blocking
+  useEffect(() => {
+    if (isFadingOut) {
+      // If we are fading out, clean up has already run/should run, so we do nothing
+      return;
+    }
+
+    // 1. Apply scroll blocking classes
+    document.documentElement.classList.add("no-scroll");
+    document.body.classList.add("no-scroll");
+
+    // 2. Prevent keyboard focus navigation to the background
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    // 3. If lenis is already initialized, stop it
+    const lenis = (window as any).lenis;
+    if (lenis) {
+      lenis.stop();
+    }
+
+    return () => {
+      // Cleanup: Restore scroll and interactivity
+      document.documentElement.classList.remove("no-scroll");
+      document.body.classList.remove("no-scroll");
+      window.removeEventListener("keydown", handleKeyDown);
+      
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.start();
+      }
+      (window as any).__loaderActive = false;
+    };
+  }, [isFadingOut]);
 
   // 1. Asset Preloading
   useEffect(() => {
