@@ -1,0 +1,924 @@
+/* ================================================================
+   PORTFOLIO SECTIONS — Component Styles (Threshold & The Path)
+   ================================================================ */
+
+/* ---- Section 0: The Threshold (閾) ---- */
+.thresholdSection {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-height: 55vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; /* Transparent to show persistent page background */
+  position: relative;
+  overflow: hidden;
+  padding: 1rem 1rem;
+  z-index: 5;
+}
+
+.thresholdContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  text-align: center;
+  max-width: 600px;
+}
+
+.thresholdText {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.85;
+  letter-spacing: 0.08em;
+}
+
+.chevronWrapper {
+  display: flex;
+  justify-content: center;
+  height: 24px;
+}
+
+.breathingChevron {
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  animation: chevronPulse 2.5s infinite ease-in-out;
+}
+
+/* ---- Section 1: The Path (道) ---- */
+.pathSection {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  height: 100vh; /* Lock to single viewport height */
+  display: grid;
+  align-items: center; /* Center content vertically */
+  background-color: transparent; /* Transparent to show persistent page background */
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+}
+
+/* Large watermark kanji in Yuji Syuku positioned behind content */
+.watermarkKanji {
+  position: absolute;
+  left: 45%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-japanese);
+  font-size: clamp(35vh, 65vh, 85vh);
+  color: var(--color-vermillion, hsl(355, 65%, 18%));
+  opacity: 0.022; /* Faded watermark for text focus */
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+
+/* Main content column spanning Column 2 in page mainGrid */
+.pathContentColumn {
+  grid-column: 2;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 860px;
+  justify-self: end;
+  margin-right: 1.5rem; /* Reduced margin to maximize usable width */
+  padding: 2.5rem 3rem;
+  background: rgba(14, 5, 5, 0.65);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(245, 235, 220, 0.08);
+}
+
+/* Thin Torii Red vertical thread running along the left margin */
+.redThread {
+  position: absolute;
+  left: 1.5rem; /* Centered in the left padding of the reading surface */
+  top: 3.5rem;
+  bottom: 3.5rem;
+  width: 1px;
+  background-color: var(--color-torii, hsl(355, 45%, 28%));
+  opacity: 0.08; /* Extremely subtle vertical accent line */
+  transform-origin: top;
+}
+
+/* Editorial book-like reading layout styling */
+.editorialContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Compact layout */
+  max-width: 100%;
+}
+
+.openingLine {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.5;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 0.02em;
+}
+
+.narrativeParagraph {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(0.92rem, 1.05vw, 1.02rem); /* Reduced slightly for density */
+  line-height: 1.8; /* Comfortable editorial spacing */
+  color: var(--color-ivory, hsl(35, 15%, 88%)); /* High contrast Ivory text */
+  text-align: left; /* Clear left-aligned text */
+}
+
+.credentials {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  line-height: 1.6;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.75;
+  border-top: 1px solid rgba(184, 180, 169, 0.08); /* 8% opacity washi divider line */
+  padding-top: 1.5rem;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.credentials:hover {
+  opacity: 0.85;
+}
+
+.credentials p {
+  position: relative;
+  display: inline;
+}
+
+.credentials p::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-torii, hsl(355, 45%, 28%));
+  transition: width 0.3s ease;
+}
+
+.credentials:hover p::after {
+  width: 100%;
+}
+
+/* ================================================================
+   RESPONSIVE MEDIA QUERIES
+   ================================================================ */
+
+@media (max-width: 767px) {
+  .pathSection {
+    height: auto;
+    min-height: 100vh;
+    padding: 6rem 0;
+  }
+
+  .pathContentColumn {
+    grid-column: 1;
+    width: auto;
+    max-width: none;
+    justify-self: stretch;
+    padding: 2.5rem 1.5rem;
+    margin: 0 1rem; /* Visual breathing space around the card edges */
+  }
+
+  .redThread {
+    left: 0.75rem; /* Centered in left padding on mobile */
+    top: 2.5rem;
+    bottom: 2.5rem;
+  }
+
+  .watermarkKanji {
+    font-size: clamp(25vh, 45vh, 55vh);
+    left: 50%;
+  }
+
+  .editorialContent {
+    gap: 1.8rem;
+  }
+
+  .craftSection {
+    min-height: 100vh;
+    height: auto;
+    padding: 6rem 0;
+  }
+
+  .craftContentColumn {
+    grid-column: 1;
+    width: auto;
+    max-width: none;
+    justify-self: stretch;
+    padding: 0 1.5rem;
+    margin: 0 1rem;
+  }
+
+  .domainRow {
+    padding: 1.8rem 0;
+  }
+
+  .domainCapability {
+    padding-right: 0;
+  }
+
+  .worksSection {
+    min-height: 100vh;
+    height: auto;
+    padding: 6rem 0;
+  }
+
+  .worksContentColumn {
+    grid-column: 1;
+    width: auto;
+    max-width: none;
+    justify-self: stretch;
+    padding: 0 1.5rem;
+    margin: 0 1rem;
+  }
+
+  .watermarkKanjiDouble {
+    font-size: clamp(15vh, 25vh, 35vh);
+    left: 50%;
+  }
+
+  .projectRow {
+    padding: 2.2rem 0;
+  }
+
+  .projectDescription {
+    padding-right: 0;
+  }
+}
+
+/* ---- Section 2: The Craft (技) ---- */
+.craftSection {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  min-height: 100vh; /* Allow natural editorial flow */
+  background-color: transparent;
+  padding: 14vh 0;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.craftContentColumn {
+  grid-column: 2;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 860px;
+  justify-self: end;
+  margin-right: 1.5rem; /* Aligned with The Path nudge */
+  padding: 0 3rem; /* Match The Path's left/right padding to align text and red thread */
+}
+
+.craftHeader {
+  margin-bottom: 4rem;
+}
+
+.craftTitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.titleKanji {
+  font-family: var(--font-japanese);
+  color: var(--color-torii, hsl(355, 45%, 28%));
+}
+
+.craftThesis {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.thesisBig {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  line-height: 1.4;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+}
+
+.thesisSmall {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.95;
+}
+
+.domainsDirectory {
+  display: flex;
+  flex-direction: column;
+}
+
+.domainRow {
+  border-top: 1px solid rgba(184, 180, 169, 0.08); /* Faint divider line */
+  padding: 2.2rem 0;
+  opacity: 1;
+  cursor: pointer;
+  transition: opacity 0.35s ease;
+}
+
+.domainRow:last-child {
+  border-bottom: 1px solid rgba(184, 180, 169, 0.08);
+}
+
+.domainRow.dimmed {
+  opacity: 0.35;
+}
+
+.domainRowHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.domainTitle {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.3rem, 1.8vw, 1.6rem);
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+}
+
+.domainRow:hover .domainTitle {
+  color: var(--color-torii, hsl(355, 45%, 28%)); /* subtle highlight on hover */
+}
+
+.domainNumber {
+  font-family: var(--font-cormorant), serif; /* Explicit Cormorant Garamond for numbers */
+  font-weight: 300;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.65;
+  transition: opacity 0.3s ease;
+}
+
+.domainRow:hover .domainNumber {
+  opacity: 1.0;
+}
+
+.domainCapabilityWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+}
+
+.domainCapabilityInner {
+  overflow: hidden;
+}
+
+.domainCapability {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  padding-bottom: 1rem;
+  padding-right: 2rem;
+}
+
+.toolsList {
+  font-family: var(--font-display);
+  font-weight: 600; /* Bolder font weight for maximum readability */
+  font-size: clamp(1rem, 1.15vw, 1.1rem); /* Increased size */
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  opacity: 0.95;
+  letter-spacing: 0.04em;
+}
+
+/* ---- Section 3: Selected Works (作品) ---- */
+.worksSection {
+  grid-column: 1 / -1;
+  grid-row: 5;
+  height: 100vh; /* Lock to single viewport height for pinning */
+  display: grid;
+  align-items: center; /* Center content vertically */
+  background-color: transparent;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.worksContentColumn {
+  grid-column: 2;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 860px;
+  justify-self: end;
+  margin-right: 1.5rem; /* Aligned with The Path and The Craft */
+  padding: 0 3rem; /* Match Path and Craft padding */
+}
+
+/* Watermark layout for two characters "作品" */
+.watermarkKanjiDouble {
+  position: absolute;
+  left: 45%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-japanese);
+  font-size: clamp(25vh, 45vh, 60vh);
+  color: var(--color-vermillion, hsl(355, 65%, 18%));
+  opacity: 0.018; /* Extremely faint background watermark */
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.worksHeader {
+  margin-bottom: 4rem;
+}
+
+.worksTitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.worksSub {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+}
+
+.worksDirectory {
+  position: relative;
+  width: 100%;
+  min-height: 580px; /* Reserve height for absolute positioned project rows */
+}
+
+.projectRow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: transparent; /* Remove black card background */
+  border: none; /* Remove card borders */
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 0;
+  box-shadow: none; /* Remove card shadows */
+  cursor: pointer;
+  opacity: 0; /* Hidden by default to prevent pre-render / SSR text overlapping */
+  pointer-events: none; /* Disable mouse triggers for hidden cards */
+}
+
+.projectRow:first-child {
+  opacity: 1; /* First card visible by default */
+  pointer-events: auto;
+}
+
+.projectRow.dimmed {
+  opacity: 0.35;
+}
+
+.projectRowHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.projectTitleContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.projectIconsContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 1; /* Default visible for mobile/touch screens */
+}
+
+@media (hover: hover) {
+  .projectIconsContainer {
+    opacity: 0;
+    transform: translateY(5px);
+    pointer-events: none;
+  }
+}
+
+.projectIconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.85;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.projectIconButton:hover {
+  color: var(--color-ivory, hsl(35, 15%, 88%)) !important;
+  opacity: 1 !important;
+  transform: translateY(-2px) !important;
+}
+
+.projectIconSvg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.projectTitle {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2vw, 1.8rem);
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+}
+
+.projectRow:hover .projectTitle {
+  color: var(--color-torii, hsl(355, 45%, 28%));
+}
+
+.projectNumber {
+  font-family: var(--font-cormorant), serif; /* Cormorant Garamond for numbers */
+  font-weight: 300;
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.65;
+  transition: opacity 0.3s ease;
+}
+
+.projectRow:hover .projectNumber {
+  opacity: 1.0;
+}
+
+.projectThesis {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.1rem, 1.3vw, 1.25rem);
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  opacity: 1.0;
+  margin-bottom: 1rem;
+}
+
+.projectKeywords {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.95;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+}
+
+.projectImageContainer {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid rgba(184, 180, 169, 0.08);
+  margin-bottom: 1.5rem;
+  position: relative;
+  background-color: var(--color-lacquer);
+}
+
+.projectImageWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  opacity: 0.75;
+  filter: brightness(0.9);
+  will-change: transform, opacity, filter;
+}
+
+.projectImage {
+  object-fit: cover;
+}
+
+.projectExpandable {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+}
+
+.projectExpandableInner {
+  overflow: hidden;
+}
+
+.projectDescription {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  padding-bottom: 1.5rem;
+  padding-right: 2rem;
+}
+
+@media (max-width: 767px) {
+  .projectTitleContainer {
+    gap: 0.75rem;
+  }
+  .projectIconsContainer {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* ---- Section 4: Principles (思考) ---- */
+.principlesSection {
+  grid-column: 1 / -1;
+  grid-row: 6;
+  min-height: 85vh;
+  background-color: transparent;
+  padding: 14vh 0;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.principlesContentColumn {
+  grid-column: 2;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 860px;
+  justify-self: end;
+  margin-right: 1.5rem;
+  padding: 0 3rem;
+}
+
+.principlesHeader {
+  margin-bottom: 3rem;
+}
+
+.principlesTitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 0.05em;
+}
+
+.principlesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.principleRow {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.principlesDivider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(184, 180, 169, 0.08);
+  transform-origin: left;
+  margin-bottom: 2.5rem;
+}
+
+.principleContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.principleRowHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.principleNumber {
+  font-family: var(--font-cormorant), serif;
+  font-weight: 300;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.7;
+}
+
+.principleRowTitle {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.2rem, 1.5vw, 1.35rem);
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 0.03em;
+}
+
+.principleStatement {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1rem, 1vw, 1rem);
+  line-height: 1.7;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 1;
+  padding-left: 3.5rem;
+}
+
+@media (max-width: 767px) {
+  .principlesSection {
+    min-height: auto;
+    padding: 6rem 0;
+  }
+
+  .principlesContentColumn {
+    grid-column: 1;
+    width: auto;
+    max-width: none;
+    justify-self: stretch;
+    padding: 0 1.5rem;
+    margin: 0 1rem;
+  }
+
+  .principlesList {
+    gap: 2.5rem;
+  }
+
+  .principlesDivider {
+    margin-bottom: 2.5rem;
+  }
+
+  .principleStatement {
+    padding-left: 0;
+  }
+}
+
+/* ---- Section 5: Conversation (対話) ---- */
+.conversationSection {
+  grid-column: 1 / -1;
+  grid-row: 7;
+  min-height: 100vh;
+  background-color: transparent; /* Transparent to let persistent background continue */
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+  padding: 14vh 0 50vh 0; /* 50vh bottom padding centers the finalMoment vertically at scroll end */
+}
+
+/* Linear gradient overlay to merge the background into solid temple-black at the end of the page */
+.conversationSection::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(14, 5, 5, 0) 40%, var(--color-temple-black, hsl(0, 15%, 4%)) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.conversationBgGlow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(140, 15, 20, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.conversationContentColumn {
+  grid-column: 2;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 860px; /* Align to standard Column 2 content width */
+  margin-right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 3rem;
+}
+
+.conversationStatement {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  line-height: 1.4;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 0.02em;
+  max-width: 860px;
+  text-align: left;
+}
+
+.conversationLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.8rem;
+  width: 100%;
+}
+
+.conversationLink {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+  opacity: 0.85; /* Higher default opacity for better readability */
+  text-decoration: none;
+  min-height: 64px; /* Expanded min-height to accommodate larger font sizes without layout shifts */
+  width: 100%;
+}
+
+.linkText {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem); /* Increased label font size */
+  letter-spacing: 0.18em;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.linkDetail {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem); /* Increased handle font size */
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  margin-top: 0.35rem;
+}
+
+.linkUnderline {
+  width: 120px; /* Elegant compact left-aligned underline */
+  height: 1px;
+  background-color: var(--color-torii, hsl(355, 45%, 28%));
+  margin-top: 6px;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.finalMoment {
+  grid-column: 1 / -1; /* Full bleed layout to center horizontally across the entire page */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally on the screen */
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 5rem; /* Elegant spacing below left-aligned column */
+  opacity: 0;
+  z-index: 2;
+}
+
+.endingKanji {
+  font-family: var(--font-japanese);
+  font-size: clamp(3.2rem, 6vw, 4.8rem); /* Increased size for visual presence */
+  color: var(--color-ivory, hsl(35, 15%, 88%)); /* Changed to high contrast Ivory to make it highly visible */
+  line-height: 1;
+}
+
+.endingSubtitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 1.1rem; /* Slightly larger text */
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.95; /* Increased opacity from 0.5 for clear visibility */
+}
+
+@media (max-width: 767px) {
+  .conversationSection {
+    min-height: auto;
+    padding: 10rem 0 50vh 0; /* Add 50vh bottom padding on mobile too */
+  }
+
+  .conversationContentColumn {
+    width: auto;
+    max-width: none;
+    padding: 0 1.5rem;
+    gap: 3.5rem;
+  }
+
+  .conversationStatement {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .conversationLinks {
+    gap: 1.5rem;
+  }
+
+  .linkText {
+    font-size: 0.9rem;
+  }
+}

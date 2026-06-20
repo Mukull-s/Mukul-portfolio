@@ -1,0 +1,276 @@
+/* ================================================================
+   BILINGUAL NAVIGATION — Component Styles
+   ================================================================ */
+
+.navContainer {
+  /* Let clicks pass through the container, but enable them on elements */
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: auto;
+}
+
+/* Desktop Navigation container */
+.desktopNav {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Base button styling */
+.navChapter {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.5rem 0;
+  text-align: left;
+  pointer-events: auto;
+  transition: transform 0.3s ease;
+  line-height: 1;
+}
+
+.navChapter:hover {
+  transform: translateX(6px);
+}
+
+/* Kanji anchors - small & Washi by default */
+.navKanji {
+  font-family: var(--font-japanese);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.15;
+  min-width: 1.8rem;
+  text-align: center;
+  transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+  line-height: 1;
+}
+
+/* English label wrapper - hidden/collapsed by default */
+.navLabelWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  transform: translateX(-15px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Connecting line indicator */
+.navLine {
+  width: 0px;
+  height: 1px;
+  background-color: var(--color-torii, hsl(355, 45%, 28%));
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Supporting English label */
+.navLabel {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  white-space: nowrap;
+}
+
+/* ---- Hover States ---- */
+.navChapter:hover .navKanji {
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  opacity: 0.88;
+  transform: scale(1.05);
+}
+
+.navChapter:hover .navLabelWrapper {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.navChapter:hover .navLine {
+  width: 20px;
+}
+
+.navChapter:hover .navLabel {
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+}
+
+/* ---- Active States ---- */
+.active .navKanji {
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  opacity: 0.65;
+  transform: scale(1.05);
+}
+
+.active .navLabelWrapper {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.active .navLine {
+  width: 20px;
+}
+
+.active .navLabel {
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  opacity: 0.75;
+}
+
+/* ---- Mobile Collapsed Trigger ---- */
+.mobileMenuTrigger {
+  display: none;
+  pointer-events: auto;
+}
+
+/* ---- Mobile Fullscreen Overlay Drawer ---- */
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(14, 5, 5, 0.96); /* Lacquer 96% opacity */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.3s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mobileNav {
+  width: 80%;
+  max-width: 320px;
+}
+
+.mobileNavList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+.mobileNavItem {
+  text-align: center;
+}
+
+.mobileNavLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.mobileNavKanji {
+  font-family: var(--font-japanese);
+  font-size: 2.2rem;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.6;
+  transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mobileNavLabel {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.8;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+/* Mobile Active States */
+.mobileActiveLink .mobileNavKanji,
+.mobileNavLink:hover .mobileNavKanji {
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.mobileActiveLink .mobileNavLabel,
+.mobileNavLink:hover .mobileNavLabel {
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  opacity: 1;
+}
+
+/* ================================================================
+   RESPONSIVE OVERRIDES
+   ================================================================ */
+
+@media (max-width: 767px) {
+  /* Hide desktop vertical list on mobile viewports */
+  .desktopNav {
+    display: none;
+  }
+
+  /* Show floating trigger button on mobile */
+  .mobileMenuTrigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background-color: rgba(14, 5, 5, 0.85); /* Lacquer transparent */
+    border: 1px solid var(--color-torii, hsl(355, 45%, 28%));
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .mobileMenuTrigger:hover,
+  .mobileMenuTrigger:active {
+    transform: scale(1.05);
+    border-color: var(--color-ivory, hsl(35, 15%, 88%));
+  }
+
+  .mobileMenuIcon {
+    font-family: var(--font-japanese);
+    font-size: 1.4rem;
+    color: var(--color-washi, hsl(30, 8%, 72%));
+    line-height: 1;
+  }
+
+  .mobileCloseIcon {
+    font-family: var(--font-japanese);
+    font-size: 1.2rem;
+    color: var(--color-torii, hsl(355, 45%, 28%));
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  .triggerOpen {
+    background-color: rgba(14, 5, 5, 0.95);
+    border-color: var(--color-torii, hsl(355, 45%, 28%));
+    transform: rotate(90deg);
+  }
+}
