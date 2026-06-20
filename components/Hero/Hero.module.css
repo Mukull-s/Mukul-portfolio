@@ -122,9 +122,6 @@
 .portraitFgLayer {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   pointer-events: none;
   will-change: transform, opacity, filter;
 }
@@ -146,10 +143,16 @@
   height: 100vh;
 }
 
-.portraitImage {
+.portraitWrapper picture {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.portraitImage {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover;
   /* Cover the entire screen, full-bleed */
   /* Start invisible — fades in via JS animation on mount */
@@ -181,7 +184,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 80vh;
   pointer-events: none;
   /* Initial state: hidden (Act I) */
   opacity: 0;
@@ -192,9 +196,11 @@
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   font-weight: 700;
   font-style: italic;
-  font-size: clamp(4rem, 12vw, 12rem);
+  font-size: clamp(8rem, 15vw, 16rem);
   line-height: 1;
+  opacity: 80%;
   color: var(--color-ivory, hsl(35, 15%, 88%));
+  letter-spacing: 16%;
   text-align: center;
   user-select: none;
   position: relative;
@@ -202,31 +208,25 @@
   width: 100%;
 }
 
-/* ================================================================
-   LAYER 6 — Subtitle
-   ================================================================ */
 .subtitleLayer {
-  position: absolute;
-  inset: 0;
+  margin-top: 2.5rem; /* Sit 2-3rem below MUKUL */
   z-index: 6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   pointer-events: none;
   /* Initial state: hidden (Act I) */
   opacity: 0;
   will-change: opacity, transform;
+  display: block;
+  width: 100%;
+  text-align: center;
 }
 
 .subtitle {
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   font-weight: 600;
-  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
-  letter-spacing: 0.22em;
+  font-size: clamp(1.3rem, 1vw, 1rem); /* slightly reduced font size */
+  letter-spacing: 0.12em; /* reduced letter-spacing */
   color: var(--color-ivory, hsl(35, 15%, 88%));
   text-align: center;
-  /* Positioned over the chest area — matching reference layout */
-  margin-top: 0px;
   user-select: none;
 }
 
@@ -300,13 +300,15 @@
   text-align: center;
   padding: 0.1rem 0;
   width: 100%;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .actVIITitle {
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  font-weight: 700;
+  font-weight: 1200;
   font-style: italic;
-  font-size: clamp(3.2rem, 5.5vw, 4.8rem);
+  font-size: clamp(3.9rem, 5.9vw, 8rem);
   line-height: 1;
   color: var(--color-ivory, hsl(35, 15%, 88%));
   margin: 0 0 0.4rem 0;
@@ -315,10 +317,10 @@
 .actVIITagline {
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   font-weight: 600;
-  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
-  letter-spacing: 0.18em;
+  font-size: clamp(0.8rem, 1vw, 0.95rem); /* slightly reduced */
+  letter-spacing: 0.12em; /* reduced letter-spacing */
   color: var(--color-washi, hsl(30, 8%, 72%));
-  margin: 0;
+  margin: 0.8rem 0 0 0;
   line-height: 1.3;
 }
 
@@ -331,6 +333,8 @@
   justify-content: center;
   overflow: visible;
   position: relative;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .actVIIPortrait {
@@ -344,18 +348,29 @@
   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%);
 }
 
+.actVIIRightColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  z-index: 10;
+  overflow: visible;
+}
+
 .actVIIBio {
   font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
-  line-height: 1.6;
+  font-weight: 800;
+  font-style: italic; /* Add italic styling to match the screenshot */
+  font-size: clamp(1rem, 1.35vw, 1.25rem); /* Increased size for visual presence */
+  line-height: 1.7;
   color: var(--color-washi, hsl(30, 8%, 72%));
   margin: 0;
-  padding: 0; /* Removed glass-card padding, direct text link */
-  max-width: 520px;
+  padding: 0;
+  max-width: 420px; /* Limit bio card width on desktop */
   width: 100%;
   position: relative;
-  text-align: center;
+  text-align: left; /* Left align biography text on desktop */
 }
 
 /* Chapter navigation — vertical list */
@@ -429,11 +444,21 @@
   .actVIILeftColumn {
     max-width: 100%;
   }
+  .actVIITitleCard {
+    opacity: 1;
+    pointer-events: auto;
+  }
   .actVIIPortraitContainer {
     max-width: 100%;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .actVIIRightColumn {
+    align-items: center;
   }
   .actVIIBio {
     max-width: 100%;
+    text-align: center;
   }
   .actVIINav {
     gap: 1.2rem;
@@ -486,60 +511,155 @@
 .loaderScreen {
   position: fixed;
   inset: 0;
-  background-color: var(--hero-bg, hsl(0, 15%, 4%));
   z-index: 99999; /* Draw on top of all elements */
   display: flex;
   align-items: center;
   justify-content: center;
   transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s;
   pointer-events: all;
+  overflow: hidden;
 }
 
+/* Layer 1: Dragon Background Image */
+.loaderBg {
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/Dragon-background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+/* Layer 2: Dark Atmospheric Overlay */
+.loaderOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.40),
+    rgba(0, 0, 0, 0.65)
+  );
+  z-index: 2;
+  transition: background-color 0.8s ease;
+}
+
+.loaderOverlay.darken {
+  background-color: rgba(0, 0, 0, 0.45); /* Extra darkening overlay at 100% */
+}
+
+/* Layer 3: Animated Film Grain Overlay */
+.grainLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.06; /* felt, not seen */
+}
+
+.grainSvg {
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.grainTexture {
+  position: absolute;
+  inset: 0;
+  filter: url(#loader-grain-filter);
+  mix-blend-mode: overlay;
+}
+
+/* Layer 4: Floating Dust Particles */
+.dustContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  overflow: hidden;
+}
+
+.dustParticle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background-color: var(--color-ivory, hsl(35, 15%, 88%));
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(0.5px);
+}
+
+/* Loader Content Container */
 .loaderContent {
+  position: relative;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 320px;
+  max-width: 360px;
 }
 
-.loaderText {
-  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  font-style: italic;
-  font-weight: 600;
-  font-size: clamp(1.5rem, 2.5vw, 1.8rem);
-  letter-spacing: 0.15em;
+/* Japanese Character Display: 序 */
+.loaderKanji {
+  font-family: var(--font-japanese);
+  font-size: clamp(3.5rem, 6vw, 4.5rem);
   color: var(--color-ivory, hsl(35, 15%, 88%));
-  margin-bottom: 0.5rem;
-  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1.5s ease, transform 1.5s ease;
+  text-shadow: 0 0 15px rgba(245, 235, 220, 0.15);
+  margin-bottom: 1.5rem;
   user-select: none;
 }
 
-.loaderBarWrapper {
+.loaderKanji.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Progress Line: thin editorial line */
+.loaderLineWrapper {
   width: 200px;
-  height: 2px;
+  height: 1px;
   background-color: rgba(245, 235, 220, 0.12);
+  margin-bottom: 1.2rem;
   position: relative;
   overflow: hidden;
-  border-radius: 0px;
 }
 
-.loaderBar {
+.loaderLine {
   height: 100%;
-  width: 0%;
+  width: 100%;
   background-color: var(--color-ivory, hsl(35, 15%, 88%));
-  transition: width 0.05s ease-out;
+  transform-origin: center;
+  transition: transform 0.1s ease-out;
 }
 
-.loaderSubtext {
-  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  font-variant: small-caps;
-  font-size: clamp(0.7rem, 1vw, 0.8rem);
-  letter-spacing: 0.3em;
-  color: var(--color-washi, hsl(30, 8%, 72%));
-  opacity: 0.6;
-  margin-top: 0.8rem;
+/* Progress Number */
+.loaderText {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  color: var(--color-ivory, hsl(35, 15%, 88%));
+  margin-bottom: 0.6rem;
   text-align: center;
   user-select: none;
+  opacity: 0.8;
+}
+
+/* Dynamic Philosophy Statements */
+.loaderSubtext {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(0.72rem, 1vw, 0.78rem);
+  letter-spacing: 0.15em;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  text-align: center;
+  user-select: none;
+  min-height: 1.5rem; /* Reserve vertical space to prevent layout shifts */
+  transition: opacity 0.3s ease;
 }
