@@ -15,6 +15,14 @@ export default function LenisProvider({
   children: React.ReactNode;
 }) {
   useEffect(() => {
+    // Prevent browser auto-scroll restoration on refresh
+    if (typeof window !== "undefined") {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      window.scrollTo(0, 0);
+    }
+
     // Initialize Lenis with cinematic configuration
     const lenis = new Lenis({
       duration: LENIS.duration,
@@ -24,6 +32,19 @@ export default function LenisProvider({
       smoothWheel: true,
       touchMultiplier: LENIS.touchMultiplier,
     });
+
+    // Share Lenis instance globally
+    if (typeof window !== "undefined") {
+      (window as any).lenis = lenis;
+      
+      // If loader is active, freeze scrolling immediately
+      if ((window as any).__loaderActive) {
+        lenis.stop();
+      }
+    }
+
+    // Force Lenis to start at 0, 0
+    lenis.scrollTo(0, { immediate: true });
 
     // Sync Lenis scroll position with GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);

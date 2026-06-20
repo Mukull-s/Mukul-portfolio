@@ -107,7 +107,7 @@ export const HERO = {
 
   englishName: {
     text: "MUKUL",
-    subtitle: "Developer. AI Architect. Storyteller.",
+    subtitle: "AI Systems Engineer • Full-Stack Developer • Builder",
   },
 } as const;
 
@@ -136,7 +136,6 @@ export const PARTICLES = {
     craft: 0.35,
     works: 0.3,
     process: 0.35,
-    horizon: 0.4,
     conversation: 0.6,
   },
 } as const;
@@ -166,9 +165,8 @@ export const SECTION_IDS = {
   path: "the-path",
   craft: "the-craft",
   works: "selected-works",
-  process: "the-process",
-  horizon: "the-horizon",
-  conversation: "begin-conversation",
+  process: "principles",
+  conversation: "conversation",
 } as const;
 
 // ---- Navigation Chapters ----
@@ -176,7 +174,6 @@ export const NAV_CHAPTERS = [
   { id: SECTION_IDS.path, kanji: "序", label: "The Path" },
   { id: SECTION_IDS.craft, kanji: "技", label: "The Craft" },
   { id: SECTION_IDS.works, kanji: "作品", label: "Selected Works" },
-  { id: SECTION_IDS.process, kanji: "思考", label: "The Process" },
-  { id: SECTION_IDS.horizon, kanji: "先", label: "The Horizon" },
+  { id: SECTION_IDS.process, kanji: "思考", label: "Principles" },
   { id: SECTION_IDS.conversation, kanji: "対話", label: "Begin a Conversation" },
 ] as const;
