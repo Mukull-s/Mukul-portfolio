@@ -102,6 +102,15 @@
     height: auto;
   }
 
+  /* Disable scroll when loader is running */
+  html.no-scroll,
+  html.no-scroll body {
+    overflow: hidden !important;
+    height: 100vh !important;
+    touch-action: none !important;
+    -webkit-overflow-scrolling: none !important;
+  }
+
   .lenis.lenis-smooth {
     scroll-behavior: auto !important;
   }

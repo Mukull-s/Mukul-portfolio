@@ -27,13 +27,11 @@ export default function EnglishNameLayer({
   subtitleRef,
 }: EnglishNameLayerProps) {
   return (
-    <>
+    <div ref={nameRef} className={styles.englishNameLayer}>
       {/* LAYER 5 — The Name */}
-      <div ref={nameRef} className={styles.englishNameLayer}>
-        <h1 className={styles.englishName} aria-label="Mukul">
-          MUKUL
-        </h1>
-      </div>
+      <h1 className={styles.englishName} aria-label="Mukul">
+        MUKUL
+      </h1>
 
       {/* LAYER 6 — The Subtitle */}
       <div ref={subtitleRef} className={styles.subtitleLayer}>
@@ -41,7 +39,7 @@ export default function EnglishNameLayer({
           {HERO.englishName.subtitle}
         </p>
       </div>
-    </>
+    </div>
   );
 }
 

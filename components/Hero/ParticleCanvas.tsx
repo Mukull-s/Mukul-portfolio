@@ -118,19 +118,64 @@ export default function ParticleCanvas({ scrollProgressRef, isLoaded }: Particle
           }
         }
       }
-
-
-
-      // 2. Scan English Name ("MUKUL") — positioned above portrait to match final y: -30vh
+ 
+      // 2. Scan English Name ("MUKUL") — match to the HTML englishName layer position
       offCtx.clearRect(0, 0, w, h);
       const englishFontSize = isMobile ? Math.min(w * 0.17, 90) : Math.min(w * 0.135, 170);
-      offCtx.font = `italic 700 ${englishFontSize}px ${cormorantFontFamily}`;
-      offCtx.textAlign = "center";
+      
+      // Query the actual HTML MUKUL title element to get its exact computed position and font size
+      const nameEl = document.querySelector(`.${styles.englishName}`);
+      let targetX = w * 0.5;
+      let targetY = h * 0.5; // Default fallback to center
+      let fontSize = englishFontSize;
+ 
+      if (nameEl) {
+        const containerEl = nameEl.parentElement as HTMLElement;
+        if (containerEl) {
+          const originalTransform = containerEl.style.transform;
+          const originalOpacity = containerEl.style.opacity;
+          
+          // Apply final GSAP transform style temporarily to measure final position
+          containerEl.style.transform = "translateY(-30vh)";
+          containerEl.style.opacity = "1";
+          
+          // Force layout recalculation
+          void containerEl.offsetHeight;
+          
+          const rect = nameEl.getBoundingClientRect();
+          targetX = rect.left + rect.width / 2;
+          targetY = rect.top + rect.height / 2;
+          
+          // Restore original styling
+          containerEl.style.transform = originalTransform;
+          containerEl.style.opacity = originalOpacity;
+        }
+        
+        // Also match the exact computed font size
+        const computedStyle = window.getComputedStyle(nameEl);
+        fontSize = parseFloat(computedStyle.fontSize) || englishFontSize;
+      }
+ 
+      // Render each character of "MUKUL" individually with explicit spacing (0.16em letter-spacing)
+      // to guarantee a pixel-perfect match with the CSS typographic layout.
+      const word = "MUKUL";
+      const charSpacings = fontSize * 0.16; // letter-spacing: 16% in CSS (0.16em)
+      
+      offCtx.font = `italic 700 ${fontSize}px ${cormorantFontFamily}`;
       offCtx.textBaseline = "middle";
+      offCtx.textAlign = "left";
       offCtx.fillStyle = "white";
       
-      // Position at ~20% height (matches CSS y: -30vh from center = 50% - 30% = 20%)
-      offCtx.fillText("MUKUL", w * 0.5, h * 0.2);
+      // Measure each character to calculate total width of the typographic block
+      const charWidths = word.split("").map(char => offCtx.measureText(char).width);
+      const totalWidth = charWidths.reduce((sum, charW) => sum + charW, 0) + (word.length - 1) * charSpacings;
+      
+      let currentX = targetX - totalWidth / 2;
+      for (let i = 0; i < word.length; i++) {
+        const char = word[i];
+        offCtx.fillText(char, currentX, targetY);
+        currentX += charWidths[i] + charSpacings;
+      }
 
       const englishImgData = offCtx.getImageData(0, 0, w, h);
       const englishPoints: { x: number; y: number }[] = [];
