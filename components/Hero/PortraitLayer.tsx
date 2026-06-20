@@ -36,17 +36,16 @@ export function PortraitBackgroundLayer({
   return (
     <div ref={portraitRef} className={styles.portraitBgLayer} aria-hidden="true">
       <div className={styles.portraitWrapper}>
-        <picture>
-          <img
-            ref={portraitImgRef}
-            src="/Portrait.png"
-            alt="Portrait Background"
-            className={styles.portraitImage}
-            width={1672}
-            height={940}
-            fetchPriority="high"
-          />
-        </picture>
+        <img
+          ref={portraitImgRef}
+          src="/Portrait.png"
+          alt="Portrait Background"
+          className={styles.portraitImage}
+          width={1672}
+          height={940}
+          fetchPriority="high"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
     </div>
   );
@@ -119,33 +118,30 @@ export function PortraitForegroundLayer({
           WebkitMaskImage: "url(#silhouette-mask)",
         }}
       >
-        <picture>
-          <img
-            ref={portraitImgRef}
-            src="/Portrait.png"
-            alt="Portrait Foreground Silhouette"
-            className={styles.portraitImage}
-            width={1672}
-            height={940}
-            fetchPriority="high"
-          />
-        </picture>
+        <img
+          ref={portraitImgRef}
+          src="/Portrait.png"
+          alt="Portrait Foreground Silhouette"
+          className={styles.portraitImage}
+          width={1672}
+          height={940}
+          fetchPriority="high"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
 
       {/* Corner layout: pre-cut transparent PNG */}
       <div className={styles.portraitWrapper}>
-        <picture>
-          <img
-            ref={portraitCornerImgRef}
-            src="/Portrait-removebg-preview.png"
-            alt="Portrait Foreground Corner Cutout"
-            className={`${styles.portraitImage} ${styles.portraitCornerImage}`}
-            width={666}
-            height={374}
-            fetchPriority="high"
-            style={{ opacity: 0 }}
-          />
-        </picture>
+        <img
+          ref={portraitCornerImgRef}
+          src="/Portrait-removebg-preview.png"
+          alt="Portrait Foreground Corner Cutout"
+          className={`${styles.portraitImage} ${styles.portraitCornerImage}`}
+          width={666}
+          height={374}
+          fetchPriority="high"
+          style={{ opacity: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
     </div>
   );
