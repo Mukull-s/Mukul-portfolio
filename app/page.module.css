@@ -1,0 +1,104 @@
+/* Root Layout Grid for the entire portfolio */
+.mainGrid {
+  display: grid;
+  grid-template-columns: minmax(6vw, 1.2fr) minmax(auto, 860px) minmax(auto, 260px) minmax(4vw, 0.4fr);
+  column-gap: 4.5rem;
+  position: relative;
+  width: 100%;
+}
+
+/* Persistent Page Background Texture (smooth parallax overlay) */
+.persistentBg {
+  position: fixed;
+  inset: 0;
+  background-image: url("/Bg.png");
+  background-color: var(--color-lacquer, hsl(355, 30%, 7%)); /* Warm base matches Hero Act VII end state */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1; /* Sits behind content but above body background */
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* Cinematic lighting and dark vignetted transition overlays over the red texture */
+.persistentBg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(14, 4, 4, 0.10) 0%, rgba(14, 4, 4, 0.65) 100%),
+    linear-gradient(to bottom, rgba(14, 4, 4, 0.70) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%, rgba(14, 4, 4, 0.75) 100%);
+  pointer-events: none;
+}
+
+/* Sections that are full-bleed (Hero, Threshold, etc.) */
+.fullBleedSection {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: 100%;
+  position: relative;
+  z-index: 2; /* Force Hero to render in front of persistentBg (z-index 1) */
+}
+
+/* Red thread left-aligned in column 2 */
+.gridLeftColumn {
+  grid-column: 2;
+  position: relative;
+}
+
+/* Navigation is sticky and placed in column 3, spanning all rows */
+.stickyNavigation {
+  grid-column: 3;
+  grid-row: 1 / -1; /* Span across all sections/rows */
+  position: sticky;
+  top: 50vh;
+  transform: translateY(-50%);
+  height: fit-content;
+  align-self: center;
+  z-index: 100;
+  pointer-events: none; /* Let clicks pass through default spaces */
+}
+
+/* Placeholder stub sections */
+.sectionStub {
+  grid-column: 1 / -1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(184, 180, 169, 0.03);
+  z-index: 5;
+  background-color: transparent; /* Show persistent texture */
+}
+
+.stubLabel {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-washi, hsl(30, 8%, 72%));
+  opacity: 0.25;
+}
+
+@media (max-width: 767px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+  
+  .stickyNavigation {
+    grid-column: 1;
+    grid-row: 1; /* Sits in corner or relative overlays */
+    position: fixed;
+    top: auto;
+    bottom: 2rem;
+    right: 2rem;
+    transform: none;
+    pointer-events: auto;
+    z-index: 100;
+  }
+}
